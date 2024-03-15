@@ -10,7 +10,7 @@ const ReviewerList: React.FC<TodoListProps> = ({ reviewers }) => {
   return (
     <div className="overflow-x-auto mt-4">
       {reviewers.map(reviewer => (
-        <Reviewer reviewer={reviewer}/>
+        <Reviewer reviewer={reviewer} key={reviewer.email}/>
       ))}
     </div>
   )

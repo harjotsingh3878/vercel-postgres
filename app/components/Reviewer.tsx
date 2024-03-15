@@ -7,7 +7,7 @@ interface ReviewerProps {
 
 const Reviewer: React.FC<ReviewerProps> = ({ reviewer }) => {
   return (
-    <div className="collapse collapse-arrow bg-base-200 mb-2" key={reviewer.name}>
+    <div className="collapse collapse-arrow bg-base-200 mb-2">
       <input type="radio" name="my-accordion-2" /> 
       <div className="collapse-title text-xl font-medium">
         {reviewer.name} <span className='text-sm'>({reviewer.job_title} at {reviewer.company})</span>

@@ -17,6 +17,10 @@ const AddReviewer = () => {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
+    setNewReviewer({
+      ...newReviewer,
+      // [e.target.name]: [e.target.value]
+    })
   }
 
   return (
