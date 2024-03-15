@@ -1,5 +1,5 @@
 {
-  "name": "vercel-postgres-example",
+  "name": "vercel-postgres",
   "version": "0.1.0",
   "private": true,
   "scripts": {
