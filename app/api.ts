@@ -1,16 +1,13 @@
-import { QueryResultRow, sql } from '@vercel/postgres';
-import { IReviewer } from './app/types/reviewers';
-
-const baseUrl = 'http://localhost:3000/api';
+import { IReviewer } from './types/reviewers';
 
 export const getAllReviewers = async (): Promise<IReviewer[]> => {
-  const response =  await fetch(`${baseUrl}/reviewers`);
+  const response =  await fetch('/api/reviewers');
   const reviewerResp = await response.json();
   return reviewerResp.reviewers.rows;
 }
 
 export const addReviewer = async (reviewer: IReviewer): Promise<IReviewer> => {
-  const response =  await fetch(`${baseUrl}/add-reviewer`, {
+  const response =  await fetch('/api/add-reviewer', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
