@@ -23,6 +23,6 @@ export const addReviewer = async (reviewer: IReviewer): Promise<IReviewer> => {
     },
     body: JSON.stringify(reviewer)
   });
-  const newReviewer = await response.json();
-  return newReviewer;
+  const reviewerResp = await response.json();
+  return reviewerResp.reviewer ? reviewerResp.reviewer : {};
 }

@@ -27,4 +27,5 @@ export interface ISearchFilter {
   searchText: string;
   searchType: string;
   jobField: string;
+  location: string;
 }

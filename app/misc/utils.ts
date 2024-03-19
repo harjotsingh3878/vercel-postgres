@@ -1,4 +1,4 @@
-import { ISearchFilter } from "../types/reviewers";
+import { IReviewerResponse, ISearchFilter } from "../types/reviewers";
 
 export const generateSearchParams = (searchFilter: ISearchFilter) => {
   let queryParams = '';
@@ -31,4 +31,22 @@ export const generateSearchWhere = (searchParams: URLSearchParams) => {
 export const addParam = (params: string, uri: string) => {
   if(!uri) uri.concat(`where ${params}`)
   else uri.concat(`AND ${params}`)
+}
+
+export const filterReviewers = (reviewers: IReviewerResponse[], searchFilter: ISearchFilter) => {
+  const fileredReviewers: IReviewerResponse[] = reviewers.filter((review: IReviewerResponse) => {
+    let requiredValue = false;
+    if(searchFilter.searchText && searchFilter.searchType) {
+      requiredValue = review[searchFilter.searchType as keyof IReviewerResponse].toLowerCase() === searchFilter.searchText.toLowerCase()
+    }
+    if(searchFilter.jobField) {
+      requiredValue = review.job_field.toLowerCase() === searchFilter.jobField.toLowerCase()
+    }
+    if(searchFilter.location) {
+      requiredValue = review.city.toLowerCase() === searchFilter.location.toLowerCase() || review.province.toLowerCase() === searchFilter.location.toLowerCase()
+    }
+    return requiredValue
+  })
+
+  return fileredReviewers;
 }

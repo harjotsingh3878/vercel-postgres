@@ -4,6 +4,7 @@ import React, { ChangeEventHandler, FormEventHandler, useState } from 'react'
 import { addReviewer } from '../api'
 import { JOB_FIELDS } from '../misc/constants'
 import { IReviewer } from '../types/reviewers'
+import Link from 'next/link'
 
 const AddReviewer = () => {
   const initialReviewer: IReviewer = {
@@ -18,12 +19,14 @@ const AddReviewer = () => {
     email: ''
   }
   const [newReviewer, setNewReviewer] = useState(initialReviewer)
+  const [showMessage, setShowMessage] = useState('')
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     if(!newReviewer.fullname || !newReviewer.email || !newReviewer.company || !newReviewer.jobTitle || !newReviewer.province) return
-    // await addReviewer(newReviewer);
-    await addReviewer(newReviewer)
+    const reviewer = await addReviewer(newReviewer)
+    if(reviewer) setShowMessage('success')
+    else setShowMessage('error')
   }
 
   const handleInput: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -43,7 +46,15 @@ const AddReviewer = () => {
   }
 
   return (
-    <>
+    <div className='max-w-2xl mx-auto'>
+      {showMessage === 'success' && <div role="alert" className="alert alert-success mt-4">
+        <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>Reviewer was successfully added!</span>
+      </div>}
+      {showMessage === 'error' && <div role="alert" className="alert alert-error mt-4">
+        <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>Unable to add reviewer. Please try again!</span>
+      </div>}
       <form onSubmit={handleSubmit} className='mt-5 flex justify-content flex-col'>
         <input
           value={newReviewer.fullname}
@@ -59,7 +70,7 @@ const AddReviewer = () => {
           type="text"
           placeholder="Company"
           className="input input-bordered w-full mb-3" />
-        <div className='flex flex-row'>
+        <div className='flex flex-row justify-content-space-between gap-4'>
           <input
             value={newReviewer.jobTitle}
             onChange={handleInput}
@@ -71,7 +82,7 @@ const AddReviewer = () => {
             value={newReviewer.jobField}
             onChange={handleSelect}
             name="jobField"
-            className="select select-bordered w-full max-w-xs mb-3 ml-2">
+            className="select select-bordered w-full max-w-xs mb-3">
             <option disabled value={''}>Select job field</option>
             {Object.entries(JOB_FIELDS).map(field => (
               <option value={field[0]} key={field[0]}>{field[1]}</option>
@@ -85,7 +96,7 @@ const AddReviewer = () => {
           type="text"
           placeholder="Company Street Address"
           className="input input-bordered mb-3 w-full" />
-        <div className='flex flex-row'>
+        <div className='flex flex-row justify-content-space-between gap-4'>
           <input
             value={newReviewer.city}
             onChange={handleInput}
@@ -97,7 +108,7 @@ const AddReviewer = () => {
             value={newReviewer.province}
             onChange={handleSelect}
             name="province"
-            className="select select-bordered max-w-xs ml-2">
+            className="select select-bordered max-w-xs">
             <option value="">Select</option>
             <option value="AB">Alberta</option>
             <option value="BC">British Columbia</option>
@@ -114,7 +125,7 @@ const AddReviewer = () => {
             type="text"
             readOnly={true}
             value="Canada"
-            className="input input-bordered mb-3 ml-2 w-full" />
+            className="input input-bordered mb-3 w-full" />
         </div>
         <input
           value={newReviewer.mobile}
@@ -132,9 +143,14 @@ const AddReviewer = () => {
           placeholder="Email"
           className="input input-bordered w-full mb-3" />
 
-        <button type='submit' className='btn mt-5 btn-primary'>Submit</button>
+        <div className='flex flex-row justify-content-space-between gap-4 mt-5 w-full'>
+          <Link href="/" className='flex-1' passHref>
+            <button className='btn w-full'>Cancel</button>
+          </Link>
+          <button type='submit' className='btn btn-primary flex-1'>Submit</button>
+        </div>
       </form>
-    </>
+    </div>
   )
 }
 

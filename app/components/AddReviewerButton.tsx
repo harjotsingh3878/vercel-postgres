@@ -1,13 +1,17 @@
+import Link from 'next/link'
 import React from 'react'
-import { AiOutlinePlus } from 'react-icons/ai'
+import { IoIosAddCircleOutline } from 'react-icons/io'
 
 const AddReviewerButton = () => {
   return (
     <>
-      <button className='btn btn-primary w-full'>
-        Add Reviewer
-        <AiOutlinePlus />
-      </button>
+      <Link href="/add-reviewer" passHref>
+        <button className='btn btn-primary w-full'>
+          Add Reviewer
+          <IoIosAddCircleOutline size={20}/>
+        </button>
+      </Link>
+      
     </>
   )
 }
