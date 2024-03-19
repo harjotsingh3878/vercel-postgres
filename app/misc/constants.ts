@@ -1,7 +1,7 @@
 export const FILTER_TYPES = {
-  Name: "Name",
-  Company: "Company",
-  JobTitle: "Job Title"
+  fullname: "Name",
+  company: "Company",
+  job_title: "Job Title"
 }
 
 export const JOB_FIELDS = {
@@ -9,7 +9,7 @@ export const JOB_FIELDS = {
   Healthcare: 'Healthcare',
   Hospitality: 'Hospitality',
   Sales: 'Sales',
-  InformationTechnology: 'InformationTechnology',
+  InformationTechnology: 'Information Technology',
   Science: 'Science',
   Architect: 'Architect',
   BusinessAdministration: 'Business Administration',

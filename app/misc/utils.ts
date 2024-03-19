@@ -1,31 +1,31 @@
 import { ISearchFilter } from "../types/reviewers";
 
 export const generateSearchParams = (searchFilter: ISearchFilter) => {
-  let params = '';
+  let queryParams = '';
   if(searchFilter.searchText && searchFilter.searchType) {
-    params.concat(`filterText=${searchFilter.searchText}&filterType=${searchFilter.searchType}&`)
+    queryParams = queryParams.concat(`searchText=${searchFilter.searchText}&searchType=${searchFilter.searchType}&`)
   }
 
   if(searchFilter.jobField) {
-    params.concat(`jobField=${searchFilter.jobField}`)
+    queryParams = queryParams.concat(`jobField=${searchFilter.jobField}`)
   }
-  return params;
+  return queryParams;
 }
 
-export const generateSearchUrl = (searchParams: URLSearchParams) => {
-  let uri = '';
+export const generateSearchWhere = (searchParams: URLSearchParams) => {
+  let params = {} as {[key: string]: string};
   const searchText = searchParams.get('searchText');
   const searchType = searchParams.get('searchType');
   const jobField = searchParams.get('jobField');
 
   if(searchText && searchType) {
-    addParam(`${searchType}=${searchText}`, uri)
+    params[searchType] = searchText
   }
   if(jobField) {
-    addParam(`jobField=${jobField}`, uri)
+    params.job_field = jobField
   }
 
-  return uri;
+  return params;
 }
 
 export const addParam = (params: string, uri: string) => {

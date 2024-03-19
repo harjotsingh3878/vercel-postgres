@@ -1,6 +1,3 @@
-import AddReviewerButton from "./components/AddReviewerButton";
-import { getAllReviewers } from "@/app/api";
-import ReviewerList from "./components/ReviewerList";
 import ManageReviewers from "./components/ManageReviewers";
 
 export default async function Home() {

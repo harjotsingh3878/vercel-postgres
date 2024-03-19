@@ -1,9 +1,13 @@
-"use client"
-
 import { ChangeEventHandler, FormEventHandler, useState } from "react";
 import { FILTER_TYPES, JOB_FIELDS } from "../misc/constants"
+import { getReviewers } from "../api";
+import { IReviewer } from "../types/reviewers";
 
-const FilterReviewers = () => {
+interface IFilterReviewsProps {
+  setReviewers: Function
+}
+
+const FilterReviewers = ({ setReviewers }: IFilterReviewsProps) => {
   const initialFilter = {
     searchText: '',
     searchType: '',
@@ -13,8 +17,9 @@ const FilterReviewers = () => {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    if((!initialFilter.searchText && !initialFilter.searchType) || !initialFilter.jobField) return
-    // await getReviewers(newReviewer);
+    if((searchFilter.searchText && !searchFilter.searchType) || !searchFilter.jobField) return
+    const reviewers = await getReviewers(searchFilter);
+    setReviewers(reviewers)
   }
 
   const handleInput: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -45,12 +50,13 @@ const FilterReviewers = () => {
         <select
           value={searchFilter.searchType}
           onChange={handleSelect}
-          name="searchText"
+          name="searchType"
           className="select select-bordered join-item">
-          <option disabled defaultValue=''>Filter By</option>
-          <option>{FILTER_TYPES.Name}</option>
-          <option>{FILTER_TYPES.Company}</option>
-          <option>{FILTER_TYPES.JobTitle}</option>
+          <option disabled value=''>Filter By</option>
+          {Object.entries(FILTER_TYPES).map(field => (
+            <option value={field[0
+            ]} key={field[0]}>{field[1]}</option>
+          ))}
         </select>
       </div>
       <select
@@ -59,11 +65,11 @@ const FilterReviewers = () => {
         name="jobField"
         className="select select-bordered w-full max-w-xs ml-2">
         <option disabled value=''>Select job field</option>
-        {Object.entries(JOB_FIELDS).map(field => {
-          return <option value={field[0]} key={field[0]}>{field[1]}</option>
-        })}
+        {Object.entries(JOB_FIELDS).map(field => (
+          <option value={field[1]} key={field[0]}>{field[1]}</option>
+        ))}
       </select>
-      <button className="btn join-item ml-2">Search</button>
+      <button type="submit" className="btn join-item ml-2">Search</button>
     </form>
   )
 }
