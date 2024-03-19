@@ -1,11 +1,11 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { IReviewer } from '../types/reviewers'
+import { IReviewerResponse } from '../types/reviewers'
 import Reviewer from './Reviewer'
 import { getAllReviewers } from '../api'
 
 const ReviewerList = () => {
-  const [reviewers, setReviewers] = useState<IReviewer[]>([])
+  const [reviewers, setReviewers] = useState<IReviewerResponse[]>([])
   useEffect(() => {
     const getReviewers = async () => {
       const resp = await getAllReviewers()
@@ -17,7 +17,7 @@ const ReviewerList = () => {
   return (
     <div className="overflow-x-auto mt-4">
       {reviewers.map(reviewer => (
-        <Reviewer reviewer={reviewer} key={reviewer.email}/>
+        <Reviewer reviewer={reviewer} key={reviewer.id}/>
       ))}
     </div>
   )

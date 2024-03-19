@@ -1,34 +1,37 @@
-import { sql } from '@vercel/postgres';
-import { NextResponse } from 'next/server';
- 
-export const dynamic = 'force-dynamic';
-export async function POST(request: Request) {
-  // const { searchParams } = new URL(request.url);
-  // const petName = searchParams.get('petName');
-  // const ownerName = searchParams.get('ownerName');
+import { IReviewer } from "@/app/types/reviewers";
+import prisma from "@/lib/prisma";
+import { NextResponse } from "next/server";
 
-  const reviewer = {
-    name: 'Peter',
-    company: 'Google',
-    jobTitle: 'Manager',
-    streetAddress: '123 Main Street',
-    provice: 'ON',
-    city: 'Ottawa',
-    mobile: '9876543210',
-    email: 'test@test.com'
-  }
- 
-  try {
-    // if (!petName || !ownerName) throw new Error('Pet and owner names required');
-    // await sql`INSERT INTO Reviewers (name, company, job_title, street_address, province, city, mobile, email) VALUES
-    //   (${reviewer.name}, ${reviewer.company}, ${reviewer.jobTitle}, ${reviewer.streetAddress}, ${reviewer.provice}, ${reviewer.city}, ${reviewer.mobile}, ${reviewer.email});`;
-    await sql`INSERT INTO Reviewers (name, company, job_title, street_address, province, city, mobile, email) VALUES
-      (${reviewer.name}, ${reviewer.company}, ${reviewer.jobTitle}, ${reviewer.streetAddress}, ${reviewer.provice}, ${reviewer.city}, ${reviewer.mobile}, ${reviewer.email});`;
+export async function POST(request: Request) {
+  const reqBody: IReviewer = await request.json();
+  console.log('2------', reqBody)
+  // const reviewer = {
+  //   name: reqBody?.fullname,
+  //   company: reqBody?.company,
+  //   jobTitle: reqBody?.jobTitle,
+  //   streetAddress: reqBody?.streetAddress,
+  //   province: reqBody?.province,
+  //   city: reqBody?.city,
+  //   mobile: reqBody?.mobile,
+  //   email: reqBody?.email
+  // }
+  try{
+    const reviewerResp = await prisma.reviewers.create({
+      data: {
+        fullname: reqBody?.fullname,
+        company: reqBody?.company,
+        job_title: reqBody?.jobTitle,
+        job_field: reqBody?.jobField,
+        street_address: reqBody?.streetAddress,
+        province: reqBody?.province,
+        city: reqBody?.city,
+        mobile: reqBody?.mobile,
+        email: reqBody?.email,
+      },
+    });
+    return NextResponse.json({ data: reviewerResp }, { status: 201 });
   } catch (error) {
-    console.log('error', error)
+    console.log('error------', error)
     return NextResponse.json({ error }, { status: 500 });
   }
- 
-  // const pets = await sql`SELECT * FROM Reviewers;`;
-  // return NextResponse.json({ pets: pets.rows }, { status: 200 });
 }

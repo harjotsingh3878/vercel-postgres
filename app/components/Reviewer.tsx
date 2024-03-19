@@ -1,8 +1,8 @@
 import React from 'react'
-import { IReviewer } from '../types/reviewers'
+import { IReviewerResponse } from '../types/reviewers'
 
 interface ReviewerProps {
-  reviewer: IReviewer
+  reviewer: IReviewerResponse
 }
 
 const Reviewer: React.FC<ReviewerProps> = ({ reviewer }) => {
@@ -10,7 +10,7 @@ const Reviewer: React.FC<ReviewerProps> = ({ reviewer }) => {
     <div className="collapse collapse-arrow bg-base-200 mb-2">
       <input type="radio" name="my-accordion-2" /> 
       <div className="collapse-title text-xl font-medium">
-        {reviewer.name} <span className='text-sm'>({reviewer.job_title} at {reviewer.company})</span>
+        {reviewer.fullname} <span className='text-sm'>({reviewer.job_title} at {reviewer.company})</span>
       </div>
       <div className="collapse-content"> 
       <div className="overflow-x-auto">
