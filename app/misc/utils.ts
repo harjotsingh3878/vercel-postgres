@@ -37,7 +37,7 @@ export const filterReviewers = (reviewers: IReviewerResponse[], searchFilter: IS
   const fileredReviewers: IReviewerResponse[] = reviewers.filter((review: IReviewerResponse) => {
     let requiredValue = false;
     if(searchFilter.searchText && searchFilter.searchType) {
-      requiredValue = review[searchFilter.searchType as keyof IReviewerResponse].toLowerCase() === searchFilter.searchText.toLowerCase()
+      requiredValue = review[searchFilter.searchType as keyof IReviewerResponse].toString().toLowerCase() === searchFilter.searchText.toLowerCase()
     }
     if(searchFilter.jobField) {
       requiredValue = review.job_field.toLowerCase() === searchFilter.jobField.toLowerCase()
