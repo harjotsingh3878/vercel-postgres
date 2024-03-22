@@ -1,4 +1,4 @@
-import { IReviewerResponse, ISearchFilter } from "../types/reviewers";
+import { IReferralResponse, ISearchFilter } from "../types/referrals";
 
 export const generateSearchParams = (searchFilter: ISearchFilter) => {
   let queryParams = '';
@@ -33,11 +33,11 @@ export const addParam = (params: string, uri: string) => {
   else uri.concat(`AND ${params}`)
 }
 
-export const filterReviewers = (reviewers: IReviewerResponse[], searchFilter: ISearchFilter) => {
-  const fileredReviewers: IReviewerResponse[] = reviewers.filter((review: IReviewerResponse) => {
+export const filterReferrals = (referrals: IReferralResponse[], searchFilter: ISearchFilter) => {
+  const fileredReferrals: IReferralResponse[] = referrals.filter((review: IReferralResponse) => {
     let requiredValue = false;
     if(searchFilter.searchText && searchFilter.searchType) {
-      requiredValue = review[searchFilter.searchType as keyof IReviewerResponse].toString().toLowerCase() === searchFilter.searchText.toLowerCase()
+      requiredValue = review[searchFilter.searchType as keyof IReferralResponse].toString().toLowerCase() === searchFilter.searchText.toLowerCase()
     }
     if(searchFilter.jobField) {
       requiredValue = review.job_field.toLowerCase() === searchFilter.jobField.toLowerCase()
@@ -48,5 +48,20 @@ export const filterReviewers = (reviewers: IReviewerResponse[], searchFilter: IS
     return requiredValue
   })
 
-  return fileredReviewers;
+  return fileredReferrals;
+}
+
+export const parseReferral = (referralResp: IReferralResponse) => {
+  return {
+    id: referralResp.id,
+    fullname: referralResp.fullname,
+    company: referralResp.company,
+    jobTitle: referralResp.job_title,
+    jobField: referralResp.job_field,
+    streetAddress: referralResp.street_address,
+    province: referralResp.province,
+    city: referralResp.city,
+    mobile: referralResp.mobile,
+    email: referralResp.email,
+  }
 }

@@ -1,4 +1,4 @@
-export interface IReviewerResponse {
+export interface IReferralResponse {
   fullname: string;
   company: string;
   job_title: string;
@@ -11,7 +11,8 @@ export interface IReviewerResponse {
   id: number;
 }
 
-export interface IReviewer {
+export interface IReferral {
+  id?: number;
   fullname: string;
   company: string;
   jobTitle: string;

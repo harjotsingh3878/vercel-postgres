@@ -1,17 +1,18 @@
 import { ChangeEventHandler, FormEventHandler, useState } from "react";
 import { FILTER_TYPES, JOB_FIELDS } from "../misc/constants"
-import { IReviewerResponse, ISearchFilter } from "../types/reviewers";
-import { CiViewList, CiViewTable } from "react-icons/ci";
-import { filterReviewers } from "../misc/utils";
+import { IReferralResponse, ISearchFilter } from "../types/referrals";
+import { CiViewList } from "react-icons/ci";
+import { filterReferrals } from "../misc/utils";
+import { AiOutlineTable } from "react-icons/ai";
 
 interface IFilterReviewsProps {
-  reviewers: IReviewerResponse[];
-  setReviewers: Function;
+  referrals: IReferralResponse[];
+  setReferrals: Function;
   viewMode: boolean;
   setViewMode: Function;
 }
 
-const FilterReviewers = ({ reviewers, setReviewers, viewMode, setViewMode }: IFilterReviewsProps) => {
+const FilterReferrals = ({ referrals, setReferrals, viewMode, setViewMode }: IFilterReviewsProps) => {
   const initialFilter: ISearchFilter = {
     searchText: '',
     searchType: '',
@@ -22,11 +23,17 @@ const FilterReviewers = ({ reviewers, setReviewers, viewMode, setViewMode }: IFi
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    const fileredReviewers = filterReviewers(reviewers, searchFilter)
+    if((!searchFilter.searchText && !searchFilter.searchType
+      && !searchFilter.jobField && !searchFilter.location) ||
+      (searchFilter.searchType && !searchFilter.searchText)) {
+        setReferrals(referrals)
+        return
+    }
+    const fileredReferrals = filterReferrals(referrals, searchFilter)
     // for api filtering
     // if((searchFilter.searchText && !searchFilter.searchType) || !searchFilter.jobField) return
-    // const reviewers = await getReviewers(searchFilter);
-    setReviewers(fileredReviewers)
+    // const referrals = await getReferrals(searchFilter);
+    setReferrals(fileredReferrals)
   }
 
   const handleInput: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -72,7 +79,7 @@ const FilterReviewers = ({ reviewers, setReviewers, viewMode, setViewMode }: IFi
           onChange={handleSelect}
           name="jobField"
           className="select select-bordered w-full max-w-xs">
-          <option value=''>Field</option>
+          <option value=''>Job Field</option>
           {Object.entries(JOB_FIELDS).map(field => (
             <option value={field[1]} key={field[0]}>{field[1]}</option>
           ))}
@@ -86,11 +93,11 @@ const FilterReviewers = ({ reviewers, setReviewers, viewMode, setViewMode }: IFi
         <button type="submit" className="btn join-item">Search</button>
       </form>
       <div role="tablist" className="tabs tabs-boxed items-center p-0">
-        <a role="tab" title="Table View" style={{height: '2.6rem'}} className={`tab ${viewMode && 'tab-active'}`} onClick={() => setViewMode(true)}><CiViewTable size={30}/></a>
+        <a role="tab" title="Table View" style={{height: '2.6rem'}} className={`tab ${viewMode && 'tab-active'}`} onClick={() => setViewMode(true)}><AiOutlineTable size={30}/></a>
         <a role="tab" title="List View" style={{height: '2.6rem'}} className={`tab ${!viewMode && 'tab-active'}`} onClick={() => setViewMode(false)}><CiViewList size={30}/></a>
       </div>
     </div>
   )
 }
 
-export default FilterReviewers
+export default FilterReferrals

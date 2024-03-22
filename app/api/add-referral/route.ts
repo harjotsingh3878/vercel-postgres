@@ -1,12 +1,12 @@
-import { IReviewer } from "@/app/types/reviewers";
+import { IReferral } from "@/app/types/referrals";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  const reqBody: IReviewer = await request.json();
+  const reqBody: IReferral = await request.json();
 
   try{
-    const reviewer = await prisma.reviewers.create({
+    const referral = await prisma.referrals.create({
       data: {
         fullname: reqBody?.fullname,
         company: reqBody?.company,
@@ -19,8 +19,9 @@ export async function POST(request: Request) {
         email: reqBody?.email,
       },
     });
-    return NextResponse.json({ reviewer }, { status: 201 });
+    return NextResponse.json({ referral }, { status: 201 });
   } catch (error) {
+    console.log('error--', error)
     return NextResponse.json({ error }, { status: 500 });
   }
 }

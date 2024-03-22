@@ -2,12 +2,12 @@ import Link from 'next/link'
 import React from 'react'
 import { IoIosAddCircleOutline } from 'react-icons/io'
 
-const AddReviewerButton = () => {
+const AddReferralButton = () => {
   return (
     <>
-      <Link href="/add-reviewer" passHref>
+      <Link href="/add-referral" passHref>
         <button className='btn btn-primary w-full'>
-          Add Reviewer
+          Add Referral
           <IoIosAddCircleOutline size={20}/>
         </button>
       </Link>
@@ -16,4 +16,4 @@ const AddReviewerButton = () => {
   )
 }
 
-export default AddReviewerButton
+export default AddReferralButton

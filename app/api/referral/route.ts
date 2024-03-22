@@ -5,13 +5,16 @@ import { NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const constructedWhere = searchParams ? generateSearchWhere(searchParams) : {}
+  const referralId = searchParams.get('id') ?
+    parseInt(searchParams.get('id') as string) : 0;
 
   try{
-    const reviewers = await prisma.reviewers.findMany({
-      where: constructedWhere
+    const referral = await prisma.referrals.findUnique({
+      where: {
+        id: (referralId)
+      }
     });
-    return NextResponse.json({ reviewers }, { status: 200 });
+    return NextResponse.json({ referral }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
   }
