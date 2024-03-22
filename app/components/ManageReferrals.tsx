@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import AddReferralButton from './AddReferralButton'
 import FilterReferrals from './FilterReferrals'
 import ReferralList from './ReferralsList'
@@ -26,7 +26,9 @@ const ManageReferrals = () => {
       <div className="my-5 flex flex-col gap-4">
         <div className='flex flex-row justify-between w-full'>
           <h1 className="text-2xl font-bold mb-20">View Referrals</h1>
-          <AddReferralButton />
+          <Suspense>
+            <AddReferralButton />
+          </Suspense>
         </div>
         <FilterReferrals
           referrals={referrals}
@@ -34,7 +36,9 @@ const ManageReferrals = () => {
           viewMode={viewMode}
           setViewMode={setViewMode}
         />
-        <ReferralList referrals={filteredReferrals} viewMode={viewMode} loading={loading} />
+        <Suspense>
+          <ReferralList referrals={filteredReferrals} viewMode={viewMode} loading={loading} />
+        </Suspense>
       </div>
       
     </>
