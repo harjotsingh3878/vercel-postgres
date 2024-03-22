@@ -2,12 +2,13 @@
 
 import React, { ChangeEventHandler, FormEventHandler, useEffect, useState } from 'react'
 import { addReferral, editReferral, getReferralById } from '../api'
-import { JOB_FIELDS } from '../misc/constants'
+import { JOB_FIELDS, PROVINCES } from '../misc/constants'
 import { IReferral } from '../types/referrals'
 import Link from 'next/link'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { IoMdClose } from 'react-icons/io'
 import { parseReferral } from '../misc/utils'
+import { useForm } from "react-hook-form";
 
 const AddReferral = () => {
   const searchParams = useSearchParams()
@@ -30,6 +31,7 @@ const AddReferral = () => {
     email: ''
   }
 
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const [newReferral, setNewReferral] = useState<IReferral>(initialReferral)
   const [showMessage, setShowMessage] = useState<string>('')
 
@@ -43,8 +45,37 @@ const AddReferral = () => {
     if(referralId) getReferral()
   }, [])
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault();
+  const registerOptions = {
+    fullname: { required: "Name is required" },
+    company: { required: "Email is required" },
+    jobTitle: { required: "Email is required" },
+    jobField: { required: "Email is required" },
+    streetAddress: { required: "Email is required" },
+    city: { required: "Email is required" },
+    province: { required: "Email is required" },
+    email: {
+      required: "Email is required",
+      pattern: {
+        value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+        message: 'Invalid email address',
+      },
+    },
+    mobile: {
+      required: "Mobile is required",
+      minLength: {
+        value: 10,
+        message: "Mobile must have at least 10 characters"
+      },
+      maxLength: {
+        value: 15,
+        message: "Mobile should not have more than 15 characters"
+      }
+    }
+  };
+
+  const handleError = (errors: any) => console.log(errors);
+
+  const handleRegistration = async () => {
     if(!newReferral.fullname || !newReferral.email ||
       !newReferral.company || !newReferral.jobTitle || !newReferral.province) return
     let referral;
@@ -86,10 +117,10 @@ const AddReferral = () => {
 
   return (
     <div className='max-w-2xl mx-auto mt-16'>
-      {/* {<div role="alert" className="alert alert-error mb-10">
+      {(errors.fullname || errors.comapny) && <div role="alert" className="alert alert-error mb-10">
         <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-        <span>Enter all details correctly to continue</span>
-      </div>} */}
+        <span>Enter all required fields to continue</span>
+      </div>}
       {showMessage === 'success' && <div role="alert" className="alert alert-success mb-10">
         <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
         <span>Referral was successfully added!</span>
@@ -103,34 +134,38 @@ const AddReferral = () => {
         <span>Unable to find referral. Please try again!</span>
         <span style={{ cursor: 'pointer' }} onClick={() => setShowMessage('')}><IoMdClose /></span>
       </div>}
-      {((isAdmin && newReferral.email) || !isAdmin) && <form onSubmit={handleSubmit} className='flex flex-col'>
+      {((isAdmin && newReferral.email) || !isAdmin) && <form onSubmit={handleSubmit(handleRegistration, handleError)} className='flex flex-col'>
         <input
           value={newReferral.fullname}
+          {...register('fullname', registerOptions.fullname)}
           onChange={handleInput}
           name="fullname"
           type="text"
           placeholder="Full Name"
-          className="input input-bordered w-full mb-3" />
+          className={`${errors?.fullname && 'input-error'} input input-bordered w-full mb-3`} />
         <input
           value={newReferral.company}
+          {...register('company', registerOptions.company)}
           onChange={handleInput}
           name="company"
           type="text"
           placeholder="Company"
-          className="input input-bordered w-full mb-3" />
+          className={`${errors?.company && 'input-error'} input input-bordered w-full mb-3`} />
         <div className='flex flex-row gap-4'>
           <input
             value={newReferral.jobTitle}
+            {...register('jobTitle', registerOptions.jobTitle)}
             onChange={handleInput}
             name="jobTitle"
             type="text"
             placeholder="Job Title"
-            className="input input-bordered w-full mb-3" />
+            className={`${errors?.jobTitle && 'input-error'} input input-bordered w-full mb-3`} />
           <select
             value={newReferral.jobField}
+            {...register('jobField', registerOptions.jobField)}
             onChange={handleSelect}
             name="jobField"
-            className="select select-bordered w-full max-w-xs mb-3">
+            className={`${errors?.jobField && 'select-error'} select select-bordered w-full max-w-xs mb-3`}>
             <option disabled value={''}>Select job field</option>
             {Object.entries(JOB_FIELDS).map(field => (
               <option value={field[0]} key={field[0]}>{field[1]}</option>
@@ -139,57 +174,58 @@ const AddReferral = () => {
         </div>
         <input
           value={newReferral.streetAddress}
+          {...register('streetAddress', registerOptions.streetAddress)}
           onChange={handleInput}
           name="streetAddress"
           type="text"
           placeholder="Company Street Address"
-          className="input input-bordered mb-3 w-full" />
+          className={`${errors?.streetAddress && 'input-error'} input input-bordered w-full mb-3`} />
         <div className='flex flex-row gap-4'>
           <input
             value={newReferral.city}
+            {...register('city', registerOptions.city)}
             onChange={handleInput}
             name="city"
             type="text"
             placeholder="City"
-            className="input input-bordered mb-3 w-full" />
+            className={`${errors?.city && 'input-error'} input input-bordered w-full mb-3`} />
           <select
             value={newReferral.province}
+            {...register('province', registerOptions.province)}
             onChange={handleSelect}
             name="province"
-            className="select select-bordered max-w-xs">
-            <option value="">Select</option>
-            <option value="AB">Alberta</option>
-            <option value="BC">British Columbia</option>
-            <option value="MB">Manitoba</option>
-            <option value="NB">New Brunswick</option>
-            <option value="NL">Newfoundland and Labrador</option>
-            <option value="NS">Nova Scotia</option>
-            <option value="ON">Ontario</option>
-            <option value="PE">Prince Edward Island</option>
-            <option value="QC">Quebec</option>
-            <option value="SK">Saskatchewan</option>
+            className={`${errors?.province && 'select-error'} select select-bordered w-full max-w-xs mb-3`}>
+            <option disabled value={''}>Select province</option>
+            {Object.entries(PROVINCES).map(field => (
+              <option value={field[0]} key={field[0]}>{field[1]}</option>
+            ))}
           </select>
           <input
             type="text"
             readOnly={true}
             value="Canada"
-            className="input input-bordered mb-3 w-full" />
+            className={`input input-bordered w-full mb-3`} />
         </div>
         <input
           value={newReferral.mobile}
+          {...register('mobile', registerOptions.mobile)}
           onChange={handleInput}
           name="mobile"
           type="number"
           placeholder="Mobile"
-          maxLength={10}
-          className="input input-bordered w-full mb-3" />
+          maxLength={15}
+          className={`${errors?.mobile && 'input-error'} input input-bordered w-full mb-3`} />
+          {/* <div className="label">
+            <span className="label-text-alt">Bottom Left label</span>
+          </div> */}
         <input
           value={newReferral.email}
+          {...register('email', registerOptions.email)}
           onChange={handleInput}
           name="email"
           type="text"
           placeholder="Email"
-          className="input input-bordered w-full mb-3" />
+          className={`${errors?.email && 'input-error'} input input-bordered w-full mb-3`} />
 
         <div className='flex flex-row gap-4 mt-5 w-full'>
           <Link href="/view-referrals" className='flex-1' passHref>

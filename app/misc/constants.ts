@@ -28,3 +28,16 @@ export const JOB_FIELDS = {
   Government: 'Government',
   LawEnforcement: 'Law enforcement'
 }
+
+export const PROVINCES = {
+  AB: 'Alberta',
+  BC: 'British Columbia',
+  MB: 'Manitoba',
+  NB: 'New Brunswick',
+  NF: 'Newfoundland and Labrador',
+  NS: 'Nova Scotia',
+  ON: 'Ontario',
+  PE: 'Prince Edward Island',
+  QC: 'Quebec',
+  SK: 'Saskatchewan',
+}
