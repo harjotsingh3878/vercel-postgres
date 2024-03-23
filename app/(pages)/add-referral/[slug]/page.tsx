@@ -1,4 +1,4 @@
-import { getReferralById } from "@/app/api";
+import { getReferralById } from "@/app/api/referrals";
 import AddReferral from "../../../components/AddReferrals";
 import { parseReferral } from "@/app/misc/utils";
 
@@ -15,7 +15,7 @@ export default async function AddReferralPage ({
   }
   const isAdmin = searchParams?.admin === "true";
   const resp = await getReferralById(referralId)
-  const referral = parseReferral(resp);
+  const referral = resp ? parseReferral(resp) : undefined;
   return (
     <main className="min-h-screen max-w-4xl mx-auto p-24">
       <h3 className='text-center text-2xl font-bold'>Edit Referral</h3>

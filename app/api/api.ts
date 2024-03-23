@@ -1,5 +1,5 @@
-import { IReferral, IReferralResponse, ISearchFilter } from './types/referrals';
-import { generateSearchParams } from './misc/utils';
+import { IReferral, IReferralResponse, ISearchFilter } from '../types/referrals';
+import { generateSearchParams } from '../misc/utils';
 
 const baseUrl = `${process.env.NEXT_PUBLIC_URL}`
 export const getAllReferrals = async (): Promise<IReferralResponse[]> => {

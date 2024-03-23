@@ -1,4 +1,4 @@
-import { getAllReferrals } from "@/app/api";
+import { getAllReferrals } from "@/app/api/referrals";
 import ManageReferrals from "@/app/components/ManageReferrals";
 
 export default async function ViewReferralPage ({

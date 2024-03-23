@@ -1,5 +1,5 @@
-import { deleteReferral } from "../api";
 import { useRouter } from "next/navigation";
+import { deleteReferral } from "../api/referrals";
 
 interface IDeleteModalProps {
   modalOpen: number;

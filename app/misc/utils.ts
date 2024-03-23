@@ -28,6 +28,19 @@ export const generateSearchWhere = (searchParams: URLSearchParams) => {
   return params;
 }
 
+export const generateSearchWhereNew = (searchFilter: ISearchFilter) => {
+  let params = {} as {[key: string]: string};
+
+  if(searchFilter.searchText && searchFilter.searchType) {
+    params[searchFilter.searchType] = searchFilter.searchText
+  }
+  if(searchFilter.jobField) {
+    params.job_field = searchFilter.jobField
+  }
+
+  return params;
+}
+
 export const addParam = (params: string, uri: string) => {
   if(!uri) uri.concat(`where ${params}`)
   else uri.concat(`AND ${params}`)
