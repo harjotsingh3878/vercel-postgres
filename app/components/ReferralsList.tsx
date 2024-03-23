@@ -11,12 +11,11 @@ import DeleteModal from './DeleteModal';
 interface IReferralListProps {
   referrals: IReferralResponse[];
   viewMode: boolean;
+  isAdmin: boolean;
   loading: boolean;
 }
 
-const ReferralList: React.FC<IReferralListProps> = ({ referrals, viewMode, loading }) => {
-  const searchParams = useSearchParams();
-  const isAdmin = searchParams.get('admin');
+const ReferralList: React.FC<IReferralListProps> = ({ referrals, viewMode, isAdmin, loading }) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState<number>(0);
 
   return (
@@ -94,13 +93,13 @@ const ReferralList: React.FC<IReferralListProps> = ({ referrals, viewMode, loadi
             {viewMode ?
               <ReferralTable
                 referrals={referrals}
-                isAdmin={isAdmin === 'true'}
+                isAdmin={isAdmin}
                 setDeleteModalOpen={setDeleteModalOpen} /> :
-              referrals.map(referral => (
-                <div className='mt-5' key={referral.id}>
-                  <Referral referral={referral} />
-                </div>
-              ))}
+                referrals.map(referral => (
+                  <div className='mt-5' key={referral.id}>
+                    <Referral referral={referral} />
+                  </div>
+                ))}
           </>
       ) : 
       <div className='text-center mx-auto mt-10'>No results found</div>}

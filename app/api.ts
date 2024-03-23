@@ -1,8 +1,8 @@
 import { IReferral, IReferralResponse, ISearchFilter } from './types/referrals';
-import { generateSearchParams, parseReferral } from './misc/utils';
+import { generateSearchParams } from './misc/utils';
 
 export const getAllReferrals = async (): Promise<IReferralResponse[]> => {
-  const response =  await fetch('/api/referrals', { cache: 'no-store'});
+  const response =  await fetch(`${process.env.URL}/api/referrals`, { cache: 'no-store'});
   const referralResp = await response.json();
   return referralResp.referrals ? referralResp.referrals : [];
 }

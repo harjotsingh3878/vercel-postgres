@@ -3,22 +3,20 @@
 import React, { ChangeEventHandler, FormEventHandler, useEffect, useState } from 'react'
 import { addReferral, editReferral, getReferralById } from '../api'
 import { JOB_FIELDS, PROVINCES } from '../misc/constants'
-import { IReferral } from '../types/referrals'
+import { IReferral, IReferralResponse } from '../types/referrals'
 import Link from 'next/link'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { IoMdClose } from 'react-icons/io'
 import { parseReferral } from '../misc/utils'
 import { useForm } from "react-hook-form";
 
-const AddReferral = () => {
-  const searchParams = useSearchParams()
-  const router = useRouter()
-  const isAdmin = searchParams.get('admin')
-  const params = useParams()
-  let referralId = '';
-  if(!Array.isArray(params.slug)) {
-    referralId = params.slug || '';
-  }
+interface IAddReferrals {
+  isAdmin?: boolean;
+  referralId?: string;
+  referral?: IReferral
+}
+
+const AddReferral: React.FC<IAddReferrals> = ({ isAdmin, referralId, referral }) => {  
   const initialReferral: IReferral = {
     fullname: '',
     company: '',
@@ -36,14 +34,23 @@ const AddReferral = () => {
   const [showMessage, setShowMessage] = useState<string>('')
 
   useEffect(() => {
-    const getReferral = async () => {
-      const resp  = await getReferralById(referralId)
-      const referral = resp && parseReferral(resp)
+    if(isAdmin) {
       if(referral) setNewReferral(referral)
       else setShowMessage('notFound')
     }
-    if(referralId) getReferral()
-  }, [])
+  }, [referral])
+
+  
+
+  // useEffect(() => {
+  //   const getReferral = async () => {
+  //     const resp  = await getReferralById(referralId)
+  //     const referral = resp && parseReferral(resp)
+  //     if(referral) setNewReferral(referral)
+  //     else setShowMessage('notFound')
+  //   }
+  //   if(referralId) getReferral()
+  // }, [])
 
   const registerOptions = {
     fullname: { required: "Name is required" },
@@ -90,7 +97,7 @@ const AddReferral = () => {
     }
     
     if(referral && referralId && isAdmin) {
-      router.push(`/view-referrals?admin=true`)
+      setShowMessage('successEdit')
     }
     else if(referral) {
       setNewReferral(initialReferral)
@@ -124,6 +131,10 @@ const AddReferral = () => {
       {showMessage === 'success' && <div role="alert" className="alert alert-success mb-10">
         <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
         <span>Referral was successfully added!</span>
+      </div>}
+      {showMessage === 'successEdit' && <div role="alert" className="alert alert-success mb-10">
+        <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>Referral was successfully updated!</span>
       </div>}
       {showMessage === 'error' && <div role="alert" className="alert alert-error mb-10">
         <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -206,26 +217,35 @@ const AddReferral = () => {
             value="Canada"
             className={`input input-bordered w-full mb-3`} />
         </div>
-        <input
-          value={newReferral.mobile}
-          {...register('mobile', registerOptions.mobile)}
-          onChange={handleInput}
-          name="mobile"
-          type="number"
-          placeholder="Mobile"
-          maxLength={15}
-          className={`${errors?.mobile && 'input-error'} input input-bordered w-full mb-3`} />
-          {/* <div className="label">
-            <span className="label-text-alt">Bottom Left label</span>
-          </div> */}
-        <input
-          value={newReferral.email}
-          {...register('email', registerOptions.email)}
-          onChange={handleInput}
-          name="email"
-          type="text"
-          placeholder="Email"
-          className={`${errors?.email && 'input-error'} input input-bordered w-full mb-3`} />
+        <div>
+          <input
+            value={newReferral.mobile}
+            {...register('mobile', registerOptions.mobile)}
+            onChange={handleInput}
+            name="mobile"
+            type="number"
+            placeholder="Mobile"
+            maxLength={15}
+            className={`${errors?.mobile && 'input-error'} input input-bordered w-full`} />
+          <div className="label">
+            <span className="label-text-alt text-red-500">{`${errors?.mobile?.message || ''}`}</span>
+          </div>
+        </div>
+        
+        <div>
+          <input
+            value={newReferral.email}
+            {...register('email', registerOptions.email)}
+            onChange={handleInput}
+            name="email"
+            type="text"
+            placeholder="Email"
+            className={`${errors?.email && 'input-error'} input input-bordered w-full`} />
+          <div className="label">
+            <span className="label-text-alt text-red-500">{`${errors?.email?.message || ''}`}</span>
+          </div>
+        </div>
+        
 
         <div className='flex flex-row gap-4 mt-5 w-full'>
           <Link href="/view-referrals" className='flex-1' passHref>
