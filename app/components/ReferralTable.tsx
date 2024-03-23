@@ -61,7 +61,7 @@ const ReferralTable = ({ referrals, isAdmin, setDeleteModalOpen }: IReferralTabl
         </div>
       }
     ],
-    []
+    [setDeleteModalOpen]
   )
 
   const table = useReactTable({

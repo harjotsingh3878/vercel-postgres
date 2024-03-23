@@ -17,7 +17,7 @@ const ManageReferrals: React.FC<IManageReferrals> = ({ referrals, isAdmin }) => 
 
   useEffect(() => {
     setFilteredReferrals(referrals)
-  }, referrals)
+  }, [referrals])
   return (
     <>
       <div className="my-5 flex flex-col gap-4">

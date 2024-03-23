@@ -1,14 +1,15 @@
 import { IReferral, IReferralResponse, ISearchFilter } from './types/referrals';
 import { generateSearchParams } from './misc/utils';
 
+const baseUrl = `${process.env.NEXT_PUBLIC_URL}`
 export const getAllReferrals = async (): Promise<IReferralResponse[]> => {
-  const response =  await fetch(`${process.env.URL}/api/referrals`, { cache: 'no-store'});
+  const response =  await fetch(`${baseUrl}/api/referrals`, { cache: 'no-store'});
   const referralResp = await response.json();
   return referralResp.referrals ? referralResp.referrals : [];
 }
 
 export const getReferrals = async (searchFilter: ISearchFilter): Promise<IReferralResponse[]> => {
-  const response =  await fetch(`/api/referrals?${generateSearchParams(searchFilter)}`, {
+  const response =  await fetch(`${baseUrl}/api/referrals?${generateSearchParams(searchFilter)}`, {
     cache: 'no-store'
   });
   const referralResp = await response.json();
@@ -16,13 +17,13 @@ export const getReferrals = async (searchFilter: ISearchFilter): Promise<IReferr
 }
 
 export const getReferralById = async (referralId: string): Promise<IReferralResponse> => {
-  const response =  await fetch(`/api/referral?id=${referralId}`, { cache: 'no-store'});
+  const response =  await fetch(`${baseUrl}/api/referral?id=${referralId}`, { cache: 'no-store'});
   const referralResp = await response.json();
   return referralResp.referral;
 }
 
 export const addReferral = async (referral: IReferral): Promise<IReferral> => {
-  const response =  await fetch('/api/add-referral', {
+  const response =  await fetch(`${baseUrl}/api/add-referral`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -34,7 +35,7 @@ export const addReferral = async (referral: IReferral): Promise<IReferral> => {
 }
 
 export const editReferral = async (referral: IReferral): Promise<IReferral> => {
-  const response =  await fetch('/api/edit-referral', {
+  const response =  await fetch(`${baseUrl}/api/edit-referral`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
@@ -46,7 +47,7 @@ export const editReferral = async (referral: IReferral): Promise<IReferral> => {
 }
 
 export const deleteReferral = async (referralId: number): Promise<void> => {
-  await fetch(`/api/delete-referral?id=${referralId}`, {
+  await fetch(`${baseUrl}/api/delete-referral?id=${referralId}`, {
     method: 'DELETE'
   });
 }

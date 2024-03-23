@@ -38,7 +38,7 @@ const AddReferral: React.FC<IAddReferrals> = ({ isAdmin, referralId, referral })
       if(referral) setNewReferral(referral)
       else setShowMessage('notFound')
     }
-  }, [referral])
+  }, [referral, isAdmin])
 
   
 
