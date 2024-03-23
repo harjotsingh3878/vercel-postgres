@@ -17,7 +17,7 @@ export default async function AddReferralPage ({
   const resp = await getReferralById(referralId)
   const referral = resp ? parseReferral(resp) : undefined;
   return (
-    <main className="min-h-screen max-w-4xl mx-auto p-24">
+    <main className="min-h-screen max-w-4xl mx-auto py-20 px-24">
       <h3 className='text-center text-2xl font-bold'>Edit Referral</h3>
       <AddReferral isAdmin={isAdmin} referralId={referralId} referral={referral}/>
     </main>

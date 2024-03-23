@@ -1,12 +1,10 @@
 "use client"
 
-import React, { ChangeEventHandler, FormEventHandler, useEffect, useState } from 'react'
+import React, { ChangeEventHandler, useEffect, useState } from 'react'
 import { JOB_FIELDS, PROVINCES } from '../misc/constants'
-import { IReferral, IReferralResponse } from '../types/referrals'
+import { IReferral } from '../types/referrals'
 import Link from 'next/link'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { IoMdClose } from 'react-icons/io'
-import { parseReferral } from '../misc/utils'
 import { useForm } from "react-hook-form";
 import { addReferral, editReferral } from '../api/referrals'
 
@@ -39,18 +37,6 @@ const AddReferral: React.FC<IAddReferrals> = ({ isAdmin, referralId, referral })
       else setShowMessage('notFound')
     }
   }, [referral, isAdmin])
-
-  
-
-  // useEffect(() => {
-  //   const getReferral = async () => {
-  //     const resp  = await getReferralById(referralId)
-  //     const referral = resp && parseReferral(resp)
-  //     if(referral) setNewReferral(referral)
-  //     else setShowMessage('notFound')
-  //   }
-  //   if(referralId) getReferral()
-  // }, [])
 
   const registerOptions = {
     fullname: { required: "Name is required" },

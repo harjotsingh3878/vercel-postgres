@@ -22,7 +22,7 @@ const ManageReferrals: React.FC<IManageReferrals> = ({ referrals, isAdmin }) => 
     <>
       <div className="my-5 flex flex-col gap-4">
         <div className='flex flex-row justify-between w-full'>
-          <h1 className="text-2xl font-bold mb-20">View Referrals</h1>
+          <h1 className="text-2xl font-bold mb-20">Referrals</h1>
             <AddReferralButton />
         </div>
         <FilterReferrals

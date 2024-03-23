@@ -4,11 +4,13 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
+  PaginationState,
   SortingState,
   useReactTable,
 } from '@tanstack/react-table'
-import { FaArrowDown, FaArrowUp } from 'react-icons/fa'
+import { FaArrowDown, FaArrowUp, FaFastBackward, FaFastForward, FaStepBackward, FaStepForward } from 'react-icons/fa'
 import Link from 'next/link';
 import { FiEdit, FiTrash2 } from 'react-icons/fi';
 
@@ -64,11 +66,16 @@ const ReferralTable = ({ referrals, isAdmin, setDeleteModalOpen }: IReferralTabl
     [setDeleteModalOpen]
   )
 
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 50,
+  })
   const table = useReactTable({
     data: referrals,
     columns,
     state: {
-      sorting
+      sorting,
+      pagination
     },
     initialState: {
       columnVisibility: {
@@ -79,6 +86,8 @@ const ReferralTable = ({ referrals, isAdmin, setDeleteModalOpen }: IReferralTabl
     onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
     debugTable: true,
   })
   return (
@@ -146,6 +155,44 @@ const ReferralTable = ({ referrals, isAdmin, setDeleteModalOpen }: IReferralTabl
             })}
         </tbody>
       </table>
+      <div className="h-2" />
+      <div className="flex justify-end gap-2 mt-5 mr-5">
+        <div className='mr-5'>
+          Showing {table.getRowModel().rows.length.toLocaleString()} of{' '}
+          {table.getRowCount().toLocaleString()}
+        </div>
+        <button
+          onClick={() => table.firstPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          <FaFastBackward />
+        </button>
+        <button
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          <FaStepBackward />
+        </button>
+        <span className="flex items-center gap-1">
+          <div>Page</div>
+          <strong>
+            {table.getState().pagination.pageIndex + 1} of{' '}
+            {table.getPageCount().toLocaleString()}
+          </strong>
+        </span>
+        <button
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          <FaStepForward />
+        </button>
+        <button
+          onClick={() => table.lastPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          <FaFastForward />
+        </button>
+      </div>
     </div>
     
   )

@@ -92,10 +92,10 @@ const FilterReferrals = ({ referrals, setReferrals, viewMode, setViewMode }: IFi
             placeholder="Location"/>
         <button type="submit" className="btn join-item">Search</button>
       </form>
-      <div role="tablist" className="tabs tabs-boxed items-center p-0">
+      {/* <div role="tablist" className="tabs tabs-boxed items-center p-0">
         <a role="tab" title="Table View" style={{height: '2.6rem'}} className={`tab ${viewMode && 'tab-active'}`} onClick={() => setViewMode(true)}><AiOutlineTable size={30}/></a>
         <a role="tab" title="List View" style={{height: '2.6rem'}} className={`tab ${!viewMode && 'tab-active'}`} onClick={() => setViewMode(false)}><CiViewList size={30}/></a>
-      </div>
+      </div> */}
     </div>
   )
 }

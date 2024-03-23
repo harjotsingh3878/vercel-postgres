@@ -3,11 +3,8 @@ import { generateSearchParams } from '../misc/utils';
 
 const baseUrl = `${process.env.NEXT_PUBLIC_URL}`
 export const getAllReferrals = async (): Promise<IReferralResponse[]> => {
-  console.log('1---------------', baseUrl)
   const response =  await fetch(`${baseUrl}/api/referrals`, { cache: 'no-store'});
-  console.log('2---------------', response)
   const referralResp = await response.json();
-  console.log('3---------------', referralResp)
   return referralResp.referrals ? referralResp.referrals : [];
 }
 

@@ -38,6 +38,7 @@ export const addReferral = async (referral: IReferral): Promise<IReferral> => {
 }
 
 export const editReferral = async (referral: IReferral): Promise<IReferralResponse> => {
+  console.log('1------', referral)
   const newReferral = await prisma.referrals.create({
     data: {
       fullname: referral?.fullname,
